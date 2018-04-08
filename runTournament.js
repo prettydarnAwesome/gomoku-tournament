@@ -16,7 +16,7 @@ r.connect({ host: process.env.DB_ADDRESS, port: process.env.DB_PORT, db: 'gomoku
     r.table('Bots').changes().run(conn, function (err, cursor) {
         console.log("Listening to database...")
         cursor.each((err, row) => {
-          console.log(row)
+          //console.log(row)
           runTournament(row.new_val.botID, 100, 19, 5)
         })
     })
