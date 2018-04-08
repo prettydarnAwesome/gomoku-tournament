@@ -12,7 +12,9 @@ require('dotenv').config()
 
 r.connect({ host: process.env.DB_ADDRESS, port: process.env.DB_PORT, db: 'gomoku' }, async function (err, conn) {
 
+
     r.table('Bots').changes().run(conn, function (err, cursor) {
+        console.log("Listening to database...")
         cursor.each((err, row) => {
           console.log(row)
           runTournament(row.new_val.botID, 100, 19, 5)
@@ -22,6 +24,8 @@ r.connect({ host: process.env.DB_ADDRESS, port: process.env.DB_PORT, db: 'gomoku
 
 
 function runTournament(targetBotID, setLength, boardSize, winCondition) {
+    console.log("Running tournament for botID: "+targetBotID);
+
     r.connect({ host: process.env.DB_ADDRESS, port: process.env.DB_PORT, db: 'gomoku' }, async function (err, conn) {
         if (err) throw err;
 
@@ -62,6 +66,7 @@ function runTournament(targetBotID, setLength, boardSize, winCondition) {
 
         conn.close(function (err) { if (err) throw err; })
     });
+    console.log("Tournament for botID: "+targetBotID+ " completed.");
 }
 
 async function playSet(bot1ID, bot2ID, setLength, boardSize, winCondition)
